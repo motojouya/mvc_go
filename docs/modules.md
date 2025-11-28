@@ -8,25 +8,48 @@
 
 ディレクトリの全体概要は以下の通り
 
-- controller
+- cmd
+  - server
+    - main.go
+  - tool
+    - main.go
+- domain
   - route.go
+  - command.go
   - ..EachAggregate
     - route.go
+    - command.go
     - controller
-- model
-  - ..EachAggregate
     - entry
     - record
-    - core
+    - plain
     - behavior
     - mock
     - store
     - schema
-- valve
-  - database
-  - local
-  - environment
-  - middleware
+- utility
+  - controller
+
+### utilityディレクトリについて
+utilityディレクトリは、Aggregateを横断して利用する関数などを集める。
+stringやdatabaseなどは後述するデフォルトAggregateに含まれる。そのほか単一の関心事項にフォーカスする関数などは適切なAggregate配下に配置する。
+Aggregateを横断して利用するのは、主にcontroller層であるため、controllerディレクトリを用意している。独自middlewareなどもここに配置したい。
+
+### route&commandファイルについて
+route.goはwebのurl route定義、command.goはcliコマンド定義を行う。
+各Aggregate配下に用意し、Aggregateごとのroute,commandを定義し、それを統括する定義をdomain直下に用意する。
+
+### デフォルトAggregate構成
+- database  
+  データベース接続関連  
+  
+- local
+  日付、乱数、ファイル、別プロセスの起動など、メモリとcpuの外に出る際の機能を提供する
+- basic
+  string,配列など組み込み型の拡張機能
+- config
+  環境変数取得、設定値管理など
+
 
 ## 各モジュールの役割
 
@@ -37,12 +60,6 @@
 日付、乱数、ファイル、DB、外部API、別プロセスの起動など、メモリとcpuの外に出る際の機能を提供する  
 特定のデータモデルに依存しない実装で、その上にデータモデルごとのインタフェースを用意するが、それはmodelディレクトリに置く  
 
-### controller  
-modelのふるまいを統合して、機能を提供する。アプリケーションのインタフェースとしての役割  
-webであれば、routingに紐づける  
-内部は集約の単位でディレクトリを切り、その中に各集約のcontrollerを配置する  
-集約単位であるが、依存している集約のmodelも利用する  
-
 ### model  
 特定のドメインモデルの集約を表現する  
 集約単位でディレクトリを切り、その中に様々な実装を施す。詳細は別途記載  
@@ -52,6 +69,12 @@ controllerは複数のmodelの集約を利用する形をとるが、利用の�
 modelはIOを伴ったり、複数のデータモデルを扱うので、より細かく以下のようにディレクトリを切る。  
 
 ### データモデル系  
+#### controller  
+modelのふるまいを統合して、機能を提供する。アプリケーションのインタフェースとしての役割  
+webであれば、routingに紐づける  
+内部は集約の単位でディレクトリを切り、その中に各集約のcontrollerを配置する  
+集約単位であるが、依存している集約のmodelも利用する  
+
 #### record  
 DBのレコードを表すのでDBと紐づけるselect句などの情報を持つ  
 後述するentry,coreがない場合はこれのみなので、入力値設定も持つことになる  
