@@ -3,7 +3,7 @@ package core_test
 // FIXME `stretchr/testify/assert` から脱却
 import (
 	"errors"
-	"github.com/motojouya/mvc_gp/model/basic/core"
+	"github.com/motojouya/mvc_gp/domain/basic/core"
 	"github.com/stretchr/testify/assert"
 	"sort"
 	"testing"

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"github.com/go-gorp/gorp"
 	_ "github.com/lib/pq"
-	basic "github.com/motojouya/mvc_go/model/basic/core"
+	basic "github.com/motojouya/mvc_go/domain/basic/core"
 )
 
 // FIXME Prepare関数いる？
