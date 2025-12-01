@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"github.com/go-gorp/gorp"
 	_ "github.com/lib/pq"
-	"github.com/motojouya/mvc_go/model/basic/core"
+	basic "github.com/motojouya/mvc_go/model/basic/core"
 )
 
 // FIXME Prepare関数いる？
@@ -17,7 +17,7 @@ type Transactional interface {
 
 type TransactionalDatabase interface {
 	Transactional
-	core.Closable
+	basic.Closable
 }
 
 type ORPer interface {
@@ -57,13 +57,13 @@ func (orp *ORP) Close() error {
 	if !ok {
 		var err = orp.Rollback()
 		if err != nil {
-			return core.CreateInsideTransactionError("transaction is not closed yet. and cannot closed transaction and connection.")
+			return basic.CreateInsideTransactionError("transaction is not closed yet. and cannot closed transaction and connection.")
 		}
 
 		// rollbackしているので、`gorp.DbMap`になっているはず。失敗しているならいずれにしろcloseできないので、↑のreturnでerrorが返る。
 		dbMap, ok = orp.SqlExecutor.(*gorp.DbMap)
 		if !ok {
-			return core.CreateInsideTransactionError("transaction is not closed yet. and cannot closed transaction and connection.")
+			return basic.CreateInsideTransactionError("transaction is not closed yet. and cannot closed transaction and connection.")
 		}
 		insideTransaction = true
 	}
@@ -75,7 +75,7 @@ func (orp *ORP) Close() error {
 
 	// closeは基本的に強制的に行うが、transactionが開いていた場合は、関数としてはエラーとする。
 	if insideTransaction {
-		return core.CreateExitTransactionError("transaction is not closed yet. but closed transaction and connection already.")
+		return basic.CreateExitTransactionError("transaction is not closed yet. but closed transaction and connection already.")
 	}
 
 	return nil
@@ -84,7 +84,7 @@ func (orp *ORP) Close() error {
 func (orp *ORP) Begin() error {
 	var dbMap, ok = orp.SqlExecutor.(*gorp.DbMap)
 	if !ok || orp.dbMap != nil {
-		return core.CreateInsideTransactionError("transaction is already started")
+		return basic.CreateInsideTransactionError("transaction is already started")
 	}
 
 	var transaction, err = dbMap.Begin()
@@ -101,7 +101,7 @@ func (orp *ORP) Begin() error {
 func (orp *ORP) Commit() error {
 	var transaction, ok = orp.SqlExecutor.(*gorp.Transaction)
 	if !ok || orp.dbMap == nil {
-		return core.CreateOutsideTransactionError("transaction is not started on Commit")
+		return basic.CreateOutsideTransactionError("transaction is not started on Commit")
 	}
 
 	var err = transaction.Commit()
@@ -118,7 +118,7 @@ func (orp *ORP) Commit() error {
 func (orp *ORP) Rollback() error {
 	var transaction, ok = orp.SqlExecutor.(*gorp.Transaction)
 	if !ok || orp.dbMap == nil {
-		return core.CreateOutsideTransactionError("transaction is not started on Rollback")
+		return basic.CreateOutsideTransactionError("transaction is not started on Rollback")
 	}
 
 	var err = transaction.Rollback()
@@ -135,7 +135,7 @@ func (orp *ORP) Rollback() error {
 func (orp *ORP) checkTransaction() error {
 	var _, ok = orp.SqlExecutor.(*gorp.Transaction)
 	if !ok || orp.dbMap == nil {
-		return core.CreateOutsideTransactionError("transaction is not started")
+		return basic.CreateOutsideTransactionError("transaction is not started")
 	}
 
 	return nil

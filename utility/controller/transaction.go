@@ -1,10 +1,10 @@
 package utility
 
 import (
-	"github.com/motojouya/mvc_go/valve/database"
+	"github.com/motojouya/mvc_go/domain/database/core"
 )
 
-func RollbackWithError(database database.Transactional, err error) error {
+func RollbackWithError(database core.Transactional, err error) error {
 	if rollbackErr := database.Rollback(); rollbackErr != nil {
 		return rollbackErr
 	}
@@ -13,7 +13,7 @@ func RollbackWithError(database database.Transactional, err error) error {
 
 // control処理の頭から最後までトランザクションとする場合に有効な関数。例えば、DBアクセスもするし、APIアクセスもして、トランザクションの粒度を操作したい場合は、control処理内でbegin/commitすべき
 // FIXME templateなのでないが、操作者としての人格(Userとか)も引数にとれるようにすべき
-func Transact[C database.TransactionalDatabase, E any, R any](callback func(C, E) (R, error)) func(C, E) (R, error) {
+func Transact[C core.TransactionalDatabase, E any, R any](callback func(C, E) (R, error)) func(C, E) (R, error) {
 	return func(control C, entry E) (R, error) {
 
 		var zero R
