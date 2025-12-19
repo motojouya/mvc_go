@@ -1,7 +1,7 @@
 package behavior
 
 import (
-	"github.com/motojouya/mvc_go/domain/local/core"
+	"github.com/motojouya/ddd_go/domain/local/core"
 )
 
 type ServerGetter interface {

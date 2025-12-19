@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/motojouya/mvc_go/domain/basic/core"
+	"github.com/motojouya/ddd_go/domain/basic/core"
 )
 
 // FIXME templateなのでないが、操作者としての人格(Userとか)も引数にとれるようにすべき

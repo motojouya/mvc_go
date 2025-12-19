@@ -1,7 +1,7 @@
 package behavior_test
 
 import (
-	"github.com/motojouya/mvc_go/domain/local/behavior"
+	"github.com/motojouya/ddd_go/domain/local/behavior"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

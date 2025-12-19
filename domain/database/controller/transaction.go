@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/motojouya/mvc_go/domain/database/core"
+	"github.com/motojouya/ddd_go/domain/database/core"
 )
 
 func RollbackWithError(database core.Transactional, err error) error {

@@ -2,7 +2,7 @@ package core_test
 
 // FIXME `stretchr/testify/assert` から脱却
 import (
-	"github.com/motojouya/mvc_go/domain/basic/core"
+	"github.com/motojouya/ddd_go/domain/basic/core"
 	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"

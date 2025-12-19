@@ -1,8 +1,8 @@
 package behavior
 
 import (
-	"github.com/motojouya/mvc_go/domain/database/core"
-	localBehavior "github.com/motojouya/mvc_go/domain/local/behavior"
+	"github.com/motojouya/ddd_go/domain/database/core"
+	localBehavior "github.com/motojouya/ddd_go/domain/local/behavior"
 )
 
 type DatabaseGetter interface {
