@@ -2,7 +2,7 @@ package core_test
 
 import (
 	"github.com/google/go-cmp/cmp"
-	"github.com/openlogi/poc_stock/domain/basic/core"
+	"github.com/openlogi/poc_stock/pkg/basic/core"
 	"testing"
 )
 

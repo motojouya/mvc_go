@@ -4,7 +4,7 @@ import (
 	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
 	"github.com/go-gorp/gorp"
-	"github.com/motojouya/ddd_go/domain/database/core"
+	"github.com/motojouya/ddd_go/pkg/database/core"
 	"reflect"
 	"testing"
 	"time"

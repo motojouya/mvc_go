@@ -13,7 +13,7 @@
     - main.go
   - tool
     - main.go
-- domain
+- pkg
   - route.go
   - command.go
   - interface_behavior.go
@@ -38,12 +38,12 @@
 アプリケーションのエントリポイント  
 webサーバの起動もそうだが、業務上cliコマンドの作成もよくある事例なので用意している。  
 
-### domain
+### pkg
 特定のドメインモデルの集約を表現する  
 集約単位でディレクトリを切り、その中に様々な実装を施す。詳細は別途記載  
 
 ### デフォルト集約
-domain配下でデフォルトで用意しているツール群  
+pkg配下でデフォルトで用意しているツール群  
 基本的に使うでしょうというイメージ  
 
 - database  
@@ -59,11 +59,11 @@ utilityディレクトリは、Aggregateを横断して利用する関数など�
 stringやdatabaseなどは後述するデフォルトAggregateに含まれる。そのほか単一の関心事項にフォーカスする関数などは適切なAggregate配下に配置する。
 Aggregateを横断して利用するのは、主にcontroller層であるため、controllerディレクトリを用意している。独自middlewareなどもここに配置したい。
 
-## domain以下のディレクトリ
+## pkg以下のディレクトリ
 
 ### route&command
 route.goはwebのurl route定義、command.goはcliコマンド定義を行う。
-各Aggregate配下に用意し、Aggregateごとのroute,commandを定義し、それを統括する定義をdomain直下に用意する。
+各Aggregate配下に用意し、Aggregateごとのroute,commandを定義し、それを統括する定義をpkg直下に用意する。
 
 ### interface
 behavior,storeのinterfaceを配置する  
@@ -74,9 +74,9 @@ modelのふるまいを統合して、機能を提供する。アプリケーシ
 webであれば、routingに紐づける  
 他の集約のbehaiviorを利用する。behaiviorはinterfaceで依存注入されるので、実装依存はしない。  
 その際、依存しているもののみならず、被依存しているものも利用する。特にDBレコードを集計する場合などによくある。  
-behaiviorと違い、1関数1構造体という形をとる。controllerの関数ごとに、依存しているdomainが違うため。  
-controllerはいわゆるドメインレイヤ/アプリレイヤとしたときに後者なので、domain配下なのは違和感がある。  
-だが、いずれにしろ機能の分類自体がdomainを意識したものになるであろうという予測なので、domain配下に配置する。  
+behaiviorと違い、1関数1構造体という形をとる。controllerの関数ごとに、依存しているpkgが違うため。  
+controllerはいわゆるドメインレイヤ/アプリレイヤとしたときに後者なので、pkg配下なのは違和感がある。  
+だが、いずれにしろ機能の分類自体がpkgを意識したものになるであろうという予測なので、pkg配下に配置する。  
 
 ### behavior  
 集約のふるまいとして関数を公開するが、その関数の実装を持つ  
@@ -101,7 +101,7 @@ coreがある場合はcoreへ、ない場合はrecordへ変換するロジック
 マイグレーションなどで利用する  
 
 ### store  
-特にDB domainの機能を利用して、データの永続化、参照を行う  
+特にDB pkgの機能を利用して、データの永続化、参照を行う  
 主にsqlのwhere句を定義する  
 必要であれば、web apiや特定フォーマットへのファイルアクセスなどioを伴う操作が複雑になる場合storeを用意する。  
 
@@ -167,7 +167,7 @@ classDiagram
 
 依存から検討される実装順序の指針
 
-0. utility,デフォルトdomainの実装  
+0. utility,デフォルトpkgの実装  
   使いまわせるので先に用意されているとよい
 1. 各modelのinterface定義  
   a. coreがあればcore、なければrecordのデータ定義のみ  
